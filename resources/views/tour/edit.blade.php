@@ -6,31 +6,47 @@
     <h3 class="text-center mb-3">✏️ Sửa Tour</h3>
 
     <form method="POST" action="/update/{{ $tour->id }}" enctype="multipart/form-data">
-        @csrf
+      @csrf
+      @method('PUT')
 
-        <input class="form-control mb-3" name="name" value="{{ $tour->name }}" required>
+    <!-- các input ở đây -->
 
-        <textarea class="form-control mb-3" name="description" required>{{ $tour->description }}</textarea>
+        {{-- Tên tour --}}
+        <input class="form-control mb-3" name="name" value="{{ old('name', $tour->name) }}" required>
 
-        <input class="form-control mb-3" name="price" value="{{ $tour->price }}" type="number" required>
+        {{-- Mô tả --}}
+        <textarea class="form-control mb-3" name="description" required>{{ old('description', $tour->description) }}</textarea>
 
-        <input class="form-control mb-3" name="slots" value="{{ $tour->slots }}" type="number" required>
+        {{-- Giá --}}
+        <input class="form-control mb-3" name="price" value="{{ old('price', $tour->price) }}" type="number" required>
 
+        {{-- Số chỗ --}}
+        <input class="form-control mb-3" name="slots" value="{{ old('slots', $tour->slots) }}" type="number" required>
+
+        {{-- Danh mục --}}
         <select class="form-control mb-3" name="category">
             <option value="">Chọn danh mục</option>
-            <option value="Trong nước" {{ $tour->category == 'Trong nước' ? 'selected' : '' }}>Trong nước</option>
-            <option value="Nước ngoài" {{ $tour->category == 'Nước ngoài' ? 'selected' : '' }}>Nước ngoài</option>
+            <option value="Trong nước" {{ old('category', $tour->category) == 'Trong nước' ? 'selected' : '' }}>Trong nước</option>
+            <option value="Nước ngoài" {{ old('category', $tour->category) == 'Nước ngoài' ? 'selected' : '' }}>Nước ngoài</option>
         </select>
 
+        {{-- Ảnh --}}
         <div class="mb-3">
-            <label for="image" class="form-label">Ảnh tour (để trống nếu không thay đổi)</label>
-            <input type="file" class="form-control" name="image" accept="image/*">
+            <label class="form-label">Ảnh tour (để trống nếu không thay đổi)</label>
+
+            {{-- preview ảnh hiện tại --}}
             @if($tour->image)
-                <small class="form-text text-muted">Ảnh hiện tại: <img src="{{ asset('storage/' . $tour->image) }}" width="100" alt="Current image"></small>
+                <div class="mb-2 text-center">
+                    <img src="{{ asset('storage/' . $tour->image) }}" 
+                         style="width:100%; max-height:200px; object-fit:cover; border-radius:10px;">
+                </div>
             @endif
+
+            <input type="file" class="form-control" name="image" accept="image/*">
         </div>
 
-        <textarea class="form-control mb-3" name="itinerary" placeholder="Hành trình tour (mô tả chi tiết)" rows="5">{{ $tour->itinerary }}</textarea>
+        {{-- Hành trình --}}
+        <textarea class="form-control mb-3" name="itinerary" rows="5" placeholder="Hành trình tour">{{ old('itinerary', $tour->itinerary) }}</textarea>
 
         <button class="btn btn-primary w-100">Cập nhật</button>
     </form>

@@ -2,17 +2,16 @@
 
 @section('title', 'Tour Trong Nước')
 
-@section('hero')
-<section class="page-hero-inner">
-    <div class="container text-white">
-        <div class="page-breadcrumb">Trang chủ <i class="fas fa-angle-right mx-2"></i> Tour trong nước</div>
-        <h1 class="hero-title">Tour Trong Nước</h1>
-        <p class="hero-subtitle">Khám phá những hành trình đẳng cấp nội địa với dịch vụ trọn gói, giá tốt và trải nghiệm văn hoá bản địa đặc sắc.</p>
-    </div>
-</section>
-@endsection
-
 @section('content')
+@auth
+    @if(Auth::user()->isAdmin())
+        <div class="d-flex justify-content-end mb-3">
+            <a href="/create" class="btn btn-success">
+                ➕ Thêm tour
+            </a>
+        </div>
+    @endif
+@endauth
 <div class="list-filter d-flex flex-column flex-lg-row gap-3 align-items-start align-items-lg-center mb-4">
     <form method="GET" action="/" class="d-flex flex-wrap gap-3 align-items-center w-100">
         <div class="flex-grow-1">

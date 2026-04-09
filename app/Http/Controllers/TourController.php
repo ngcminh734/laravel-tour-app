@@ -37,15 +37,15 @@ class TourController extends Controller
             'description' => 'required|string',
             'price' => 'required|integer|min:0',
             'slots' => 'required|integer|min:1',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:40960',
             'itinerary' => 'nullable|string',
         ]);
 
         $data = $request->all();
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('tours', 'public');
-        }
+    $data['image'] = $request->file('image')->store('tours', 'public');
+}
 
         Tour::create($data);
         return redirect('/')->with('success', 'Tour đã được thêm!');
@@ -56,30 +56,46 @@ class TourController extends Controller
         return view('tour.edit', compact('tour'));
     }
 
-    public function update(Request $request, $id) {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|integer|min:0',
-            'slots' => 'required|integer|min:1',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'itinerary' => 'nullable|string',
-        ]);
+    public function update(Request $request, $id)
+{
+   
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required|string',
+        'price' => 'required|integer|min:0',
+        'slots' => 'required|integer|min:1',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:40960',
+        'itinerary' => 'nullable|string',
+    ]);
 
-        $tour = Tour::find($id);
-        $data = $request->all();
+    $tour = Tour::findOrFail($id);
 
-        if ($request->hasFile('image')) {
-            // Xóa ảnh cũ nếu có
-            if ($tour->image) {
-                Storage::disk('public')->delete($tour->image);
-            }
-            $data['image'] = $request->file('image')->store('tours', 'public');
+    // ✅ chỉ lấy field cần thiết
+    $data = $request->only([
+        'name',
+        'description',
+        'price',
+        'slots',
+        'category',
+        'itinerary'
+    ]);
+
+    // ✅ xử lý ảnh
+    if ($request->hasFile('image')) {
+
+        // xoá ảnh cũ
+        if ($tour->image && Storage::disk('public')->exists($tour->image)) {
+            Storage::disk('public')->delete($tour->image);
         }
 
-        $tour->update($data);
-        return redirect('/')->with('success', 'Tour đã được cập nhật!');
+        // lưu ảnh mới
+        $data['image'] = $request->file('image')->store('tours', 'public');
     }
+
+    $tour->update($data);
+
+    return redirect('/')->with('success', 'Tour đã được cập nhật!');
+}
 
     public function delete($id) {
         Tour::destroy($id);

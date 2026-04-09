@@ -28,7 +28,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/create', [TourController::class, 'create']);
     Route::post('/store', [TourController::class, 'store']);
     Route::get('/edit/{id}', [TourController::class, 'edit']);
-    Route::post('/update/{id}', [TourController::class, 'update']);
+    Route::put('/update/{id}', [TourController::class, 'update']);
     Route::get('/delete/{id}', [TourController::class, 'delete']);
     Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
     Route::post('/admin/users/{id}/toggle-role', [AdminController::class, 'toggleRole'])->name('admin.toggle-role');
