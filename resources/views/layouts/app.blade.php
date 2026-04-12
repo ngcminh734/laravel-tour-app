@@ -41,7 +41,7 @@
                     <li class="nav-item"><a class="nav-link" href="/">Điểm đến</a></li>
                     <li class="nav-item"><a class="nav-link" href="/">Tin tức</a></li>
                     <li class="nav-item"><a class="nav-link" href="/">Thủ tục xin visa</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/">Cẩm nang du lịch</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('guides.index') }}">Cẩm nang du lịch</a></li>
                     <li class="nav-item"><a class="nav-link btn btn-success text-white px-4 ms-lg-3" href="/">Đặt tour</a></li>
                     @auth
                         <li class="nav-item"><a class="nav-link" href="{{ route('profile') }}">Profile</a></li>
@@ -71,6 +71,9 @@
     <div class="container">
         @if(session('success'))
             <div class="alert alert-success shadow-sm">{{ session('success') }}</div>
+        @endif
+        @if(session('error'))
+            <div class="alert alert-danger shadow-sm">{{ session('error') }}</div>
         @endif
         @yield('content')
     </div>
